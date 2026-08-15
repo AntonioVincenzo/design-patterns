@@ -9,6 +9,8 @@ elsewhere.
 
 - [`profile_pages.md`](profile_pages.md) — profile-page conventions (exit/destructive-action placement
   & hue).
+- [`code_style/naming.md`](code_style/naming.md) — naming conventions; incl. never authoring or
+  targeting opaque/compiler-generated class names (e.g. Svelte scope hashes like `s-HmxhlUSUYybo`).
 
 ## Convention
 
