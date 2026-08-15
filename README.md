@@ -1,6 +1,6 @@
 # design-patterns
 
-A private design-pattern library for Rodeo-Org products — reusable UI/UX conventions distilled from
+A design-pattern library for Rodeo-Org products — reusable UI/UX conventions distilled from
 specific product rulings. Each doc captures the concrete ruling verbatim and, where the ruling encodes
 a reusable principle, extracts the general (palette- and project-agnostic) form so it can be applied
 elsewhere.
