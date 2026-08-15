@@ -23,10 +23,14 @@ anti-pattern is anything that **treats such a name as stable or meaningful**:
    nothing. Use a semantic name that says what the element *is*
    (`.surface-item`, `.severity-chip`), never how it happens to be scoped.
 2. **Never write a selector that targets a generated scope hash**
-   (`.foo.s-HmxhlUSUYybo { … }`). The hash is derived from the component's style
-   content, so it **changes the moment the styles change** — a rule keyed on it
-   silently stops matching after the next edit, or keeps matching a stale build.
-   Style the semantic class; let the compiler scope it.
+   (`.foo.s-HmxhlUSUYybo { … }`). The hash is the compiler's, not yours — and its
+   derivation is the compiler's choice: Svelte's default is a hash of the style
+   *content* (so it changes on the next style edit), while a project can configure
+   `cssHash` to something else (qack's is stable per file — the same
+   `s-HmxhlUSUYybo` survived a background-color change). Either way you do not
+   control when or how it changes, so a rule keyed on it silently stops matching
+   after a refactor, rename, or config change. Style the semantic class; let the
+   compiler scope it.
 3. **If the generated names leak into debugging and hurt**, that is a signal to
    configure the compiler's `cssHash` for deterministic, readable output — not a
    signal to start writing or matching the raw hashes yourself.
