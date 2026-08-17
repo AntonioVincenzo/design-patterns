@@ -1,9 +1,9 @@
 # design-patterns
 
-A design-pattern library for Rodeo-Org products — reusable UI/UX conventions distilled from
-specific product rulings. Each doc captures the concrete ruling verbatim and, where the ruling encodes
-a reusable principle, extracts the general (palette- and project-agnostic) form so it can be applied
-elsewhere.
+A design-pattern library for Rodeo-Org products — reusable UI/UX and operational conventions distilled
+from specific product rulings. Each doc captures the concrete ruling verbatim and, where the ruling
+encodes a reusable principle, extracts the general (palette-, project-, and stack-agnostic) form so it
+can be applied elsewhere.
 
 ## Contents
 
@@ -11,6 +11,8 @@ elsewhere.
   & hue).
 - [`code_style/naming.md`](code_style/naming.md) — naming conventions; incl. never authoring or
   targeting opaque/compiler-generated class names (e.g. Svelte scope hashes like `s-HmxhlUSUYybo`).
+- [`deploy_scripts.md`](deploy_scripts.md) — deploy-script conventions (branch-parameterized
+  pull→build→run; always rebuild from source, never serve a stale prebuilt artifact).
 
 ## Convention
 
