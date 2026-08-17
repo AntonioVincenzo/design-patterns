@@ -32,16 +32,24 @@ A deploy script for a git-backed app should have five properties, in order:
    structurally — the checkout and the served artifact can never disagree. (Motivating failure cataloged
    in `pantheon-config/bugs/gitignored-dist-served-stale-looks-like-code-regression-checkout-does-not-refresh.md`.)
 
-4. **Load per-target config so branches coexist.** Source a per-branch env file (`.env.<branch>`, falling
-   back to `.env`) before running, and keep deploy config (ports, database URLs, secrets) out of the
-   repo (gitignored). Distinct port + datastore per branch is what lets `dev` and `main` run
-   side-by-side on one host without colliding. Fail loudly if a required var (e.g. the database URL) is
-   absent — don't boot half-configured.
+4. **Keep per-target runtime config outside the repo, so branches coexist.** Each target's runtime
+   config — port, database URL, secrets — lives with *whatever owns the running process*, never in the
+   repo (gitignored env file, or the service unit's own `EnvironmentFile`). Distinct port + datastore
+   per branch is what lets `dev` and `main` run side-by-side on one host without colliding. The deploy
+   script itself needs none of that runtime config for the pull+build phases; it only needs it if the
+   script also *runs* the process directly (see 5).
 
-5. **Fail-fast, run last, hand off signals.** `set -euo pipefail`; each phase logs a clear banner; the
-   run phase comes last and `exec`s the process so signals (SIGTERM from a service manager, Ctrl-C)
-   reach the app directly. Offer a build-only mode (`--no-run`) for the case where a process manager,
-   not the script, owns the running process.
+5. **Fail-fast; the run phase comes last and hands off to whatever supervises the process.** `set -euo
+   pipefail`; each phase logs a clear banner. How the "run" phase is spelled depends on who owns the
+   long-lived process:
+   - **A service manager owns it** (systemd/supervisor — the common production case): the run phase is
+     `systemctl restart <service>` (service name derived from the branch, e.g. `rodeo-<branch>`,
+     overridable). The unit owns env, port, and restart-on-failure; the script's job is just
+     *pull → build → restart*. This is rodeo-forum's model (`rodeo-dev` on its droplet).
+   - **The script owns it** (foreground / dev box): the run phase loads the per-target env (4) and
+     `exec`s the process, so signals reach the app directly rather than the shell wrapper.
+   Offer a build-only mode (`--no-run` / `--no-restart`) for when you want to stage a build without
+   bouncing the running process.
 
 The intent is a deploy that is **reproducible and self-consistent**: the same command deploys any
 branch, from a clean ref, always serving exactly the code on that branch — in any stack the product
