@@ -13,6 +13,10 @@ can be applied elsewhere.
   targeting opaque/compiler-generated class names (e.g. Svelte scope hashes like `s-HmxhlUSUYybo`).
 - [`deploy_scripts.md`](deploy_scripts.md) — deploy-script conventions (branch-parameterized
   pull→build→run; always rebuild from source, never serve a stale prebuilt artifact).
+- [`agent-harness/stop_hook_channel_reply_gate.md`](agent-harness/stop_hook_channel_reply_gate.md) —
+  agent-harness pattern: a `Stop` lifecycle hook that blocks a turn from ending while the operator's
+  last channel inbound is unanswered by an actual send-tool call (so "I replied" in the transcript is
+  never mistaken for delivery).
 
 ## Convention
 
